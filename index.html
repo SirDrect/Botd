@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cyber Froly - 3D Animated Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  /* Reset & base */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  body {
+    height: 100vh;
+    background: linear-gradient(135deg, #000022, #001122);
+    color: #0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    perspective: 1200px;
+  }
+
+  /* Container */
+  #container {
+    width: 400px;
+    background: #111122;
+    border-radius: 30px;
+    box-shadow:
+      0 0 20px #0ff,
+      inset 0 0 40px #00ffff88;
+    padding: 40px 30px;
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  /* Login Box */
+  #loginBox {
+    text-align: center;
+  }
+
+  /* Profile photo spinning */
+  .photo-circle {
+    width: 140px; height: 140px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    background: url('https://i.ibb.co/27FCzqxX/3178.jpg') no-repeat center/cover;
+    box-shadow:
+      0 0 25px #0ff,
+      inset 0 0 60px #00ffffaa;
+    animation: spin 20s linear infinite;
+    transform-style: preserve-3d;
+  }
+  @keyframes spin {
+    from {transform: rotateY(0deg);}
+    to {transform: rotateY(360deg);}
+  }
+
+  /* Robot animation */
+  .robot-avatar {
+    position: absolute;
+    top: 15px; left: 15px;
+    width: 60px; height: 60px;
+    background: url('https://i.ibb.co/smRqV2p/robot-avatar.png') no-repeat center/contain;
+    box-shadow: 0 0 15px #0ff;
+    animation: robotFloat 4s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+  @keyframes robotFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* Inputs style */
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 15px 25px;
+    margin-bottom: 25px;
+    border-radius: 50px;
+    border: none;
+    background: linear-gradient(145deg, #011f2f, #003355);
+    color: #0ff;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow:
+      5px 5px 20px #002233,
+      -5px -5px 20px #004477,
+      inset 0 0 12px #00ffff;
+    transition: all 0.4s ease;
+    outline: none;
+    cursor: text;
+    transform-style: preserve-3d;
+  }
+  input[type="text"]:focus, input[type="password"]:focus {
+    box-shadow:
+      0 0 30px #0ff,
+      inset 0 0 40px #0ff;
+    transform: translateZ(25px);
+    color: #0ff;
+  }
+
+  /* Login button */
+  button.btn {
+    width: 100%;
+    padding: 16px 0;
+    border-radius: 50px;
+    border: none;
+    background: linear-gradient(90deg, #00f0ff, #00aaff);
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #000;
+    cursor: pointer;
+    box-shadow: 0 0 40px #00ffff;
+    user-select: none;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+    transform-style: preserve-3d;
+  }
+  button.btn:hover {
+    background: linear-gradient(90deg, #00ffff, #00e5ff);
+    box-shadow: 0 0 70px #00ffff;
+  }
+
+  /* Welcome message */
+  #welcomeMessage {
+    margin-top: 25px;
+    font-weight: 900;
+    font-size: 2.5rem;
+    color: #0ff;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 1s ease, transform 1s ease;
+    user-select: none;
+  }
+  #welcomeMessage.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Main Content */
+  #mainContent {
+    display: none;
+    margin-top: 25px;
+    text-align: center;
+  }
+
+  #mainContent img.profile-photo {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 4px solid #0ff;
+    box-shadow:
+      0 0 20px #0ff,
+      inset 0 0 40px #00ffffaa;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% {transform: translateY(0);}
+    50% {transform: translateY(-15px);}
+  }
+
+  /* Name + animated roles */
+  h1#profileName {
+    font-size: 2.7rem;
+    margin-top: 15px;
+    font-weight: 900;
+    color: #0ff;
+    text-shadow: 0 0 15px #0ff;
+  }
+
+  /* Animated roles text */
+  #roles {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-top: 5px;
+    height: 36px;
+    color: #00ffff;
+    text-shadow:
+      0 0 10px #00ffff,
+      0 0 20px #00ffff;
+    user-select: none;
+  }
+
+  /* Role color cycling */
+  .role-color1 { color: #0ff; }
+  .role-color2 { color: #0f0; }
+  .role-color3 { color: #00ffff; }
+  .role-color4 { color: #0ff; }
+
+  /* About section */
+  #about {
+    margin: 25px auto 0;
+    max-width: 600px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #a0f7ff;
+    user-select: none;
+    text-align: justify;
+  }
+
+  /* WhatsApp Groups */
+  #groups {
+    margin-top: 30px;
+  }
+  #groups a {
+    display: inline-block;
+    background: #001f33;
+    border: 2px solid #0ff;
+    padding: 12px 20px;
+    margin: 8px 10px;
+    border-radius: 25px;
+    font-weight: 700;
+    color: #0ff;
+    text-decoration: none;
+    box-shadow: 0 0 15px #00ffffaa;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  #groups a:hover {
+    background: #00ffff;
+    color: #000;
+    box-shadow: 0 0 40px #00ffff;
+  }
+
+  /* Comments box */
+  .comment-box {
+    margin: 40px auto 0;
+    max-width: 600px;
+    text-align: left;
+  }
+  .comment-box input[type="text"],
+  .comment-box textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    margin-bottom: 12px;
+    resize: vertical;
+    background: #001122;
+    color: #0ff;
+    font-weight: 600;
+    box-shadow:
+      inset 0 0 10px #00ffff99;
+  }
+  .comment-box textarea {
+    min-height: 90px;
+  }
+  .comment-box button {
+    width: 100%;
+    background: linear-gradient(90deg, #00f0ff, #00aaff);
+    color: #000;
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 14px;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 0 30px #00ffffaa;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .comment-box button:hover {
+    background: linear-gradient(90deg, #00ffff, #00e5ff);
+  }
+
+  /* Display comments */
+  #commentDisplay div.comment {
+    background: #111122;
+    padding: 10px 18px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    color: #0ff;
+    font-weight: 600;
+    position: relative;
+    box-shadow: 0 0 10px #00ffff88;
+    word-break: break-word;
+  }
+
+  #commentDisplay button {
+    position: absolute;
+    top: 10px;
+    background: transparent;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 5px 12px;
+    border-radius: 12px;
+    user-select: none;
+  }
+  #commentDisplay button.edit {
+    right: 60px;
+    color: #0f0;
+  }
+  #commentDisplay button.delete {
+    right: 10px;
+    color: #f00;
+  }
+
+</style>
+</head>
+<body>
+
+<div id="container">
+
+  <div class="robot-avatar"></div>
+
+  <!-- LOGIN BOX -->
+  <div id="loginBox">
+    <div class="photo-circle" aria-label="Profile Photo"></div>
+
+    <input type="text" id="username" placeholder="Username" autocomplete="off" />
+    <input type="password" id="password" placeholder="Password" autocomplete="off" />
+    <button class="btn" onclick="login()">Login</button>
+  </div>
+
+  <!-- WELCOME MESSAGE -->
+  <div id="welcomeMessage">Welcome <span id="userDisplay"></span>!</div>
+
+  <!-- MAIN CONTENT -->
+  <div id="mainContent">
+    <img src="https://i.ibb.co/TBsNCW3F/3694.jpg" alt="Cyber Froly" class="profile-photo" />
+    <h1 id="profileName">Cyber Froly</h1>
+    <div id="roles"></div>
+
+    <div id="about">
+      <p>I'm a Cyber Security student of Sri Lanka.</p>
+      <p>I build things using HTML, CSS & JS.</p>
+      <p>Love dark UIs and 3D animations.</p>
+      <p>Simple yet powerful designs.</p>
+      <p>Mobile friendly and modern.</p>
+    </div>
+
+    <div id="groups">
+      <a href="https://chat.whatsapp.com/Ev8zLlQpUtJFoWLN7mRcoq?mode=ac_t" target="_blank">🎬 Movie Group</a>
+      <a href="https://chat.whatsapp.com/IIrvI0Yejzl184rJCkFTR2?mode=ac_t" target="_blank">🔞 18+ Movie Group</a>
+      <a href="https://chat.whatsapp.com/Ds9j0YSg9lNG3UaK1S16Bo?mode=ac_t" target="_blank">📺 TV Series Group</a>
+    </div>
+
+    <div class="comment-box">
+      <h3>Leave a Comment</h3>
+      <input type="text" id="commentName" placeholder="Your Name" />
+      <textarea id="commentText" placeholder="Your Comment..."></textarea>
+      <button onclick="saveComment()">Submit</button>
+
+      <div id="commentDisplay"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Role animation with color cycling
+  const roles = ['Developer', 'Programmer'];
+  const rolesEl = document.getElementById('roles');
+  let roleIndex = 0;
+  let colorIndex = 0;
+  const colors = ['#0ff', '#0f0', '#00ffff', '#0ff'];
+
+  function updateRole() {
+    rolesEl.textContent = roles[roleIndex];
+    rolesEl.style.color = colors[colorIndex];
+    roleIndex = (roleIndex + 1) % roles.length;
+    colorIndex = (colorIndex + 1) % colors.length;
+  }
+  setInterval(updateRole, 1500);
+  updateRole();
+
+  // Login function
+  function login() {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    if (user === 'froly123' && pass === 'froly123') {
+      document.getElementById('loginBox').style.display = 'none';
+
+      const welcomeMsg = document.getElementById('welcomeMessage');
+      const userDisplay = document.getElementById('userDisplay');
+      userDisplay.textContent = user;
+      welcomeMsg.classList.add('show');
+
+      setTimeout(() => {
+        welcomeMsg.classList.remove('show');
+        document.getElementById('mainContent').style.display = 'block';
+      }, 2500);
+    } else {
+      alert('Invalid Credentials');
+    }
+  }
+
+  // Comments system with edit/delete
+  function saveComment() {
+    const name = document.getElementById('commentName').value.trim();
+    const text = document.getElementById('commentText').value.trim();
+    if (!name || !text) {
+      alert('Please fill both fields');
+      return;
+    }
+    const commentDisplay = document.getElementById('commentDisplay');
+
+    // Create comment container
+    const commentDiv = document.createElement('div');
+    commentDiv.className = 'comment';
+
+    // Comment text span
+    const commentTextSpan = document.createElement('span');
+    commentTextSpan.textContent = `${name}: ${text}`;
+    commentDiv.appendChild(commentTextSpan);
+
+    // Edit button
+    const editBtn = document.createElement('button');
+    editBtn.className = 'edit';
+    editBtn.textContent = 'Edit';
+    editBtn.onclick = () => editComment(commentDiv, commentTextSpan, name);
+    commentDiv.appendChild(editBtn);
+
+    // Delete button
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete';
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.onclick = () => {
+      if (confirm('Delete this comment?')) {
+        commentDisplay.removeChild(commentDiv);
+      }
+    };
+    commentDiv.appendChild(deleteBtn);
+
+    commentDisplay.appendChild(commentDiv);
+
+    // Clear input fields
+    document.getElementById('commentName').value = '';
+    document.getElementById('commentText').value = '';
+  }
+
+  function editComment(commentDiv, commentTextSpan, originalName) {
+    // Replace commentTextSpan with textarea
+    const oldText = commentTextSpan.textContent.slice(originalName.length + 2); // remove "Name: "
+    const textarea = document.createElement('textarea');
+    textarea.value = oldText;
+    textarea.style.width = '100%';
+    textarea.style.borderRadius = '12px';
+    textarea.style.padding = '8px';
+    textarea.style.marginTop = '8px';
+    commentDiv.replaceChild(textarea, commentTextSpan);
+
+    // Change Edit button to Save
+    const editBtn = commentDiv.querySelector('button.edit');
+    editBtn.textContent = 'Save';
+
+    // Disable delete during edit
+    const deleteBtn = commentDiv.querySelector('button.delete');
+    deleteBtn.disabled = true;
+    deleteBtn.style.opacity = '0.5';
+    deleteBtn.style.cursor = 'default';
+
+    editBtn.onclick = () => {
+      const newText = textarea.value.trim();
+      if (!newText) {
+        alert('Comment cannot be empty');
+        return;
+      }
+      // Restore text span with updated text
+      commentTextSpan.textContent = `${originalName}: ${newText}`;
+      commentDiv.replaceChild(commentTextSpan, textarea);
+
+      // Reset buttons
+      editBtn.textContent = 'Edit';
+      deleteBtn.disabled = false;
+      deleteBtn.style.opacity = '1';
+      deleteBtn.style.cursor = 'pointer';
+
+      // Reset onclick
+      editBtn.onclick = () => editComment(commentDiv, commentTextSpan, originalName);
+    };
+  }
+</script>
+
+</body>
+</html>
